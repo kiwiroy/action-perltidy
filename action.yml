@@ -1,0 +1,31 @@
+name: perltidy
+description: Install and run perltidy on codebase
+inputs:
+  extra_options:
+    description: Additional options for perltidy
+    required: false
+  ignore:
+    description: paths to ignore
+    required: false
+    default: "."
+  paths:
+    description: Paths or globs to run perltidy on
+    required: false
+    default: "**/*.p[lm] **/*.t"
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      run: cpanm -n -q Perl::Tidy
+
+    - shell: bash
+      run: bash --version && perltidy --version
+
+    - shell: bash
+      run: |
+        set -x
+        # Affirm as per https://lists.gnu.org/archive/html/bug-bash/2017-04/msg00036.html
+        export GLOBIGNORE=${{inputs.ignore}}
+        shopt -s extglob globstar nullglob
+        perltidy --pro=.../.perltidyrc -b -bext='/' ${{inputs.extra_options}} ${{inputs.paths}} && \
+          git diff --exit-code

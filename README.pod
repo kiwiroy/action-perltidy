@@ -1,0 +1,31 @@
+=encoding utf8
+
+=head1 action-perltidy
+
+A GitHub action to run L<perltidy>. The action will be successful if L<perltidy> has already been run on the codebase,
+but fail if L<perltidy> reformats, or has a non-zero exit code.
+
+=head1 Synopsis
+
+  steps:
+    - uses: kiwiroy/action-perltidy@main
+
+=head1 Inputs
+
+=head2 extra_options
+
+Additional options for perltidy that are appended to:
+
+    --pro=.../.perltidyrc -b -bext='/'
+
+=head2 ignore
+
+Paths to ignore when using globbing in `paths`.
+
+=head2 paths
+
+Paths or globs to run perltidy on. The default is:
+
+    **/*.p[lm] **/*.t
+
+=cut
